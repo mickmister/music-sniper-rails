@@ -41,4 +41,4 @@ deploy_to_heroku:
     - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     - docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
-    - heroku container:release web
+    - heroku container:release web --app music-sniper-dev
