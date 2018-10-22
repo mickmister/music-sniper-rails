@@ -34,6 +34,11 @@ deploy_to_heroku:
   - docker:dind
   dependencies:
     - build_to_heroku
+  before_script:
+    - apk add bash
+    - apk add curl
+    - apk add nodejs
+    - curl https://cli-assets.heroku.com/install.sh | sh
   script:
-    - heroku container:login
+    - docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
     - heroku container:release web
