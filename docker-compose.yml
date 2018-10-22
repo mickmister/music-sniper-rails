@@ -1,0 +1,29 @@
+api:
+  command: rails s
+  volumes:
+    - .:/app
+  build: .
+  ports:
+    # - "5433:5432"
+    - "3001:3000"
+  environment:
+    MUSIC_SNIPER_DATABASE_USERNAME: postgres
+    MUSIC_SNIPER_DATABASE_PASSWORD: heydude
+    MUSIC_SNIPER_DATABASE_PORT: 5432
+    MUSIC_SNIPER_DATABASE_HOST: db
+    MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
+  links:
+    - db
+  # networks:
+    # - back-tier
+db:
+  image: postgres
+  ports:
+    - "5433:5432"
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: heydude
+    # networks:
+      # - back-tier
+# networks:
+  # back-tier:
