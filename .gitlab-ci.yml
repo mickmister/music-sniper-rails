@@ -1,0 +1,32 @@
+stages:
+  - build
+  - deploy
+
+build_on_gitlab:
+  stage: build
+  image: docker:latest
+  services:
+  - docker:dind
+  stage: build
+  script:
+    - docker-compose build
+    - docker-compose
+    - docker push registry.gitlab.com/mjkochell/music-sniper-rails:latest
+
+build_to_heroku:
+  stage: build
+  services:
+  - docker:dind
+  script:
+    - heroku container:login
+    - heroku container:push web
+
+deploy_to_heroku:
+  stage: deploy
+  services:
+  - docker:dind
+  dependencies:
+    - build_to_heroku
+  script:
+    - heroku container:login
+    - heroku container:release web
