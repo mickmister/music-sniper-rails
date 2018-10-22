@@ -15,6 +15,7 @@ build_on_gitlab:
 
 build_to_heroku:
   stage: build
+  image: docker:latest
   services:
   - docker:dind
   before_script:
@@ -25,6 +26,7 @@ build_to_heroku:
 
 deploy_to_heroku:
   stage: deploy
+  image: docker:latest
   services:
   - docker:dind
   dependencies:
