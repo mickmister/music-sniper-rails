@@ -3,6 +3,6 @@ class AudioFile < ApplicationRecord
   has_one_attached :attached_file
 
   def url
-    url_for(attached_file) if attached_file.present?
+    url_for(attached_file) if attached_file.attached?
   end
 end
