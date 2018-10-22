@@ -15,10 +15,11 @@ build_on_gitlab:
 
 build_to_heroku:
   stage: build
+  image: docker:latest
   services:
   - docker:dind
   before_script:
-    - apt-get install curl
+    - apk add curl
     - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     - docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
@@ -26,6 +27,7 @@ build_to_heroku:
 
 deploy_to_heroku:
   stage: deploy
+  image: docker:latest
   services:
   - docker:dind
   dependencies:
