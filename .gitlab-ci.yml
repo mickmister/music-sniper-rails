@@ -3,7 +3,7 @@ stages:
   - deploy
 
 build_on_gitlab:
-  stage: build
+  stage: other
   image: docker:latest
   services:
   - docker:dind
@@ -20,7 +20,7 @@ build_to_heroku:
   before_script:
     - curl https://cli-assets.heroku.com/install.sh | sh
   script:
-    - heroku container:login
+    - docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
     - heroku container:push web
 
 deploy_to_heroku:
