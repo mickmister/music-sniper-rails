@@ -1,4 +1,4 @@
-FROM ruby:2.5.3-alpine
+FROM ruby:2.5.1-alpine
 
 RUN apk update && apk add build-base nodejs postgresql-dev bash nano
 ENV EDITOR=nano
