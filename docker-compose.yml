@@ -1,7 +1,12 @@
+# builder:
+#   build: .
+#   dockerfile: ./Dockerf
+
 api:
   command: rails s
   volumes:
     - .:/app
+    - /app/tmp
   build: .
   ports:
     # - "5433:5432"
@@ -12,6 +17,7 @@ api:
     MUSIC_SNIPER_DATABASE_PORT: 5432
     MUSIC_SNIPER_DATABASE_HOST: db
     MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
+    ASSET_HOST: "http://localhost:1234"
   links:
     - db
   # networks:
