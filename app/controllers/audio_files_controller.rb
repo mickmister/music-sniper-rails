@@ -13,6 +13,13 @@ class AudioFilesController < ApplicationController
     @audio_file = AudioFile.new
   end
 
+  def trim
+    @audio_file = AudioFile.find(params[:id])
+    api = NodeApiService.new(@audio_file.url)
+    @audio_file = api.trim(start: params[:start], duration: params[:duration])
+    render 'show'
+  end
+
   def create
     @audio_file = AudioFile.create(post_params)
     render 'show'

@@ -1,35 +1,35 @@
 # builder:
 #   build: .
 #   dockerfile: ./Dockerf
-
-api:
-  command: rails s
-  volumes:
-    - .:/app
-    - /app/tmp
-  build: .
-  ports:
-    # - "5433:5432"
-    - "3001:3000"
-  environment:
-    MUSIC_SNIPER_DATABASE_USERNAME: postgres
-    MUSIC_SNIPER_DATABASE_PASSWORD: heydude
-    MUSIC_SNIPER_DATABASE_PORT: 5432
-    MUSIC_SNIPER_DATABASE_HOST: db
-    MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
-    ASSET_HOST: "http://localhost:1234"
-  links:
-    - db
-  # networks:
-    # - back-tier
-db:
-  image: postgres
-  ports:
-    - "5433:5432"
-  environment:
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: heydude
-    # networks:
-      # - back-tier
-# networks:
-  # back-tier:
+version: '3'
+services:
+  rails:
+    command: rails s
+    volumes:
+      - .:/app
+      - ./Gemfile.lock:/app/Gemfile.lock
+      - /app/tmp
+    build: .
+    ports:
+      # - "5433:5432"
+      - "3001:3000"
+    environment:
+      MUSIC_SNIPER_DATABASE_USERNAME: postgres
+      MUSIC_SNIPER_DATABASE_PASSWORD: heydude
+      MUSIC_SNIPER_DATABASE_PORT: 5432
+      MUSIC_SNIPER_DATABASE_HOST: db
+      MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
+      RAILS_ENV: development
+    env_file:
+      - .env
+  db:
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: heydude
+networks:
+  default:
+    external:
+      name: back-tier

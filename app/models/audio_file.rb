@@ -4,7 +4,7 @@ class AudioFile < ApplicationRecord
 
   def url
     return nil unless attached_file.attached?
-    return file_storage_host_url if ENV.fetch('FILE_STORAGE_HOST').present?
+    return file_storage_host_url if ENV.fetch('FILE_STORAGE_HOST', nil).present?
 
     url_for(attached_file)
   end
