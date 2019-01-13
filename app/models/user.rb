@@ -1,9 +1,9 @@
 class User < ApplicationRecord
+  has_secure_password
+
   has_many :comments, inverse_of: :user
 
-  def cool_comments
-    comments.select do |comment|
-      comment.text.include? 'cool'
-    end
+  def safe_attributes
+    as_json.select {|k,v| !['password_digest'].include?(k) }
   end
 end

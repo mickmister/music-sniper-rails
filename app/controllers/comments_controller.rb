@@ -1,11 +1,11 @@
 class CommentsController < ApplicationController
   def create
-    @comment = Comment.create!(comment_params)
+    @comment = current_user.comments.create!(comment_params)
     render 'show'
   end
 
   def update
-    @comment = Comment.find_by(id: params[:id])
+    @comment = current_user.comments.find_by(id: params[:id])
     @comment.update(comment_params)
     render 'show'
   end
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment = Comment.find_by(id: params[:id])
+    @comment = current_user.comments.find_by(id: params[:id])
     @comment.destroy!
     render json: {}
   end
@@ -27,6 +27,6 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:text, :user_id, :audio_file_id)
+    params.require(:comment).permit(:text, :audio_file_id)
   end
 end
