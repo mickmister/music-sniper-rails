@@ -7,10 +7,14 @@ class AuthenticateUser
   end
 
   def call
-    auth_token = JsonWebToken.encode(user_id: user.id) if user
-    return {
-      auth_token: auth_token, user: user.safe_attributes
-    }
+    if user
+      auth_token = JsonWebToken.encode(user_id: user.id) if user
+      return {
+        auth_token: auth_token, user: user.safe_attributes
+      }
+    else
+      raise 'Auth failed'
+    end
   end
 
   private
