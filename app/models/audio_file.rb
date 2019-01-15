@@ -1,17 +1,9 @@
 class AudioFile < ApplicationRecord
   include Rails.application.routes.url_helpers
+  include FileStorage
   has_one_attached :attached_file
 
   def url
-    return nil unless attached_file.attached?
-    return file_storage_host_url if ENV.fetch('FILE_STORAGE_HOST', nil).present?
-
-    url_for(attached_file)
-  end
-
-  private
-
-  def file_storage_host_url
-    "#{ENV.fetch('FILE_STORAGE_HOST')}/#{attached_file.key}"
+    calculate_url(attached_file)
   end
 end
