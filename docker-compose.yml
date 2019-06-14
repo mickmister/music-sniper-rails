@@ -22,6 +22,8 @@ services:
       RAILS_ENV: development
     env_file:
       - .env
+    depends_on:
+      - db
   db:
     image: postgres
     ports:

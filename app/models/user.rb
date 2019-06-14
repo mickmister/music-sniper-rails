@@ -10,7 +10,7 @@ class User < ApplicationRecord
     calculate_url(avatar)
   end
 
-  def safe_attributes
-    as_json(except: ['password_digest']).merge(image_url: image_url)
+  def as_json(options)
+    super(options, except: ['password_digest']).merge(image_url: image_url)
   end
 end
