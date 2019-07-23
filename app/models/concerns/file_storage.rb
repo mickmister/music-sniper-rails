@@ -9,7 +9,12 @@ module FileStorage
   end
 
   def file_storage_host_url(storage_obj)
-    "#{ENV.fetch('FILE_STORAGE_HOST')}/#{storage_obj.key}"
+    [
+      ENV.fetch('FILE_STORAGE_HOST', nil),
+      storage_obj.key,
+      'blob',
+      "#{storage_obj.filename.base}.#{storage_obj.filename.extension}",
+    ].join('/')
   end
 
 end
