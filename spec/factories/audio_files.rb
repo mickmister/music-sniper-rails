@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :audio_file do
     
   end
