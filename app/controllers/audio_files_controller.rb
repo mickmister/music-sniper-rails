@@ -2,7 +2,7 @@ class AudioFilesController < ApplicationController
   skip_before_action :force_json, only: [:new]
 
   def index
-    @audio_files = AudioFile.all
+    @audio_files = AudioFile.includes(:clips).all
   end
 
   def show
@@ -21,7 +21,12 @@ class AudioFilesController < ApplicationController
   end
 
   def create
-    @audio_file = AudioFile.create(post_params)
+    @audio_file = AudioFile.new(post_params.merge(user_id: current_user.id))
+    if !@audio_file.save
+      err = @audio_file.errors.full_messages.join('. ')
+      render json: {error: err}, status: :bad_request
+      return
+    end
     render 'show'
   end
 

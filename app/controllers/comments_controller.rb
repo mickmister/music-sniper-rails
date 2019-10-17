@@ -12,7 +12,8 @@ class CommentsController < ApplicationController
 
   def index
     if params[:audio_file_id]
-      @comments = Comment.where(audio_file_id: params[:audio_file_id])
+      audio_file = AudioFile.find(params[:audio_file_id])
+      @comments = audio_file.comments
     else
       @comments = Comment.all
     end

@@ -1,6 +1,34 @@
 class ClipsController < ApplicationController
-  # need to be smart about returning projects for a given clip
-  # and clips for a given project
-  # how does it fit into redux
-  # do we return ids sometimes?
+  def create
+    p = clip_params.merge(user_id: current_user.id)
+    if p[:audio_file_id].blank?
+      render json: {error: 'No audio file id'}, status: 400
+      return
+    end
+
+    c = Clip.new(p)
+    if c.save
+      render json: c
+    else
+      err = c.errors.full_messages.join('. ')
+      render json: {error: err}, status: 400
+    end
+  end
+
+  def index
+    if params[:audio_file_id]
+      f = AudioFile.find_by(id: params[:audio_file_id])
+      clips = f.clips
+    elsif params[:project_id]
+      p = Project.find_by(id: params[:audio_file_id])
+      clips = p.clips
+    else
+      clips = Clip.all
+    end
+    render json: clips
+  end
+
+  def clip_params
+    params.require(:clip).permit(:audio_file_id, :name, :start, :end)
+  end
 end

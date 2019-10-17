@@ -1,12 +1,12 @@
 class ProjectsController < ApplicationController
   def index
-    render json: Project.all, include: [:project_clips]
+    render json: Project.all, include: [:project_attachments, :clips]
   end
 
   def create
     @project = current_user.projects.create(project_params)
 
-    render json: @project, include: [:project_clips]
+    render json: @project, include: [:project_attachments, :clips]
   end
 
   def update
@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
       render json: {error: 'Failed to update project'}, status: :bad_request
     end
 
-    render json: @project, include: [:project_clips]
+    render json: @project, include: [:project_attachments, :clips]
   end
 
   def clips
@@ -36,22 +36,22 @@ class ProjectsController < ApplicationController
       render json: {error: 'Failed to update project'}, status: :bad_request
     end
 
-    render json: @project, include: [:project_clips]
+    render json: @project, include: [:project_attachments]
   end
 
   def remove_clip
-    @project = Project.find(params[:id])
-    
+    @project = current_user.projects.find(params[:id])
+
     if @project.clips.where(id: params[:clip_id]).length == 0
       render json: {error: 'Clip not attached to project'}, status: :bad_request
     end
 
-    join_obj = @project.project_clips.find_by(clip_id: params[:clip_id])
-    if !@project.project_clips.delete(join_obj.id)
+    join_obj = @project.project_attachments.find_by(item_type: Clip.name, item_id: params[:clip_id])
+    if !@project.project_attachments.delete(join_obj.id)
       render json: {error: 'Failed to update project'}, status: :bad_request
     end
 
-    render json: @project, include: [:project_clips]
+    render json: @project, include: [:project_attachments]
   end
 
   private
@@ -59,7 +59,7 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(
       :name,
-      project_clips_attributes: [:id, :clip_id, :project_id, :_destroy],
+      project_attachments_attributes: [:id, :item_type, :item_id, :project_id, :_destroy],
     )
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_05_073059) do
+ActiveRecord::Schema.define(version: 2019_08_16_031642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,17 +62,21 @@ ActiveRecord::Schema.define(version: 2019_08_05_073059) do
     t.bigint "audio_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "commentable_type"
+    t.bigint "commentable_id"
     t.index ["audio_file_id"], name: "index_comments_on_audio_file_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "project_clips", force: :cascade do |t|
+  create_table "project_attachments", force: :cascade do |t|
+    t.string "item_type"
+    t.bigint "item_id"
     t.bigint "project_id"
-    t.bigint "clip_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["clip_id"], name: "index_project_clips_on_clip_id"
-    t.index ["project_id"], name: "index_project_clips_on_project_id"
+    t.index ["item_type", "item_id"], name: "index_project_attachments_on_item_type_and_item_id"
+    t.index ["project_id"], name: "index_project_attachments_on_project_id"
   end
 
   create_table "projects", force: :cascade do |t|

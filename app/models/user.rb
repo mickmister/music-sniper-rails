@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_many :comments, inverse_of: :user
   has_many :projects, inverse_of: :user
+  has_many :clips, inverse_of: :user
+  has_many :audio_files, inverse_of: :user
 
   def image_url
     calculate_url(avatar)
