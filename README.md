@@ -1,24 +1,16 @@
-# README
+# Music Sniper
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This repo is the backend for [Music Sniper](https://github.com/mickmister/music-sniper), a music collaboration application.
 
-Things you may want to cover:
+# Environment Setup
 
-* Ruby version
+1. Clone/fork repo
 
-* System dependencies
+2. Install docker
+https://docs.docker.com/v17.09/engine/installation
 
-* Configuration
+3. In the directory of the repo, run `docker-compose up`
 
-* Database creation
+When running this again in the future, you may get an error "Server already running". If this happens need to run `docker-compose rm -f rails` first. Or you can run the small script `./run` after running `chmod a+x run` one time.
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Visit the [frontend repo](https://github.com/mickmister/music-sniper) for information on deploying the frontend application.
