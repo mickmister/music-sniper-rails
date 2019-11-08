@@ -22,4 +22,12 @@ class ApplicationController < ActionController::API
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
+
+  def error_msg(other_file)
+    if other_file.errors.present?
+      other_file.errors.full_messages.join('. ')
+    end
+
+    return ''
+  end
 end

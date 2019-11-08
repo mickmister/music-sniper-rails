@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_031642) do
+ActiveRecord::Schema.define(version: 2019_11_08_051201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,18 +41,22 @@ ActiveRecord::Schema.define(version: 2019_08_16_031642) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_audio_files_on_deleted_at"
     t.index ["user_id"], name: "index_audio_files_on_user_id"
   end
 
   create_table "clips", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "audio_file_id"
-    t.boolean "is_audio_file", default: false
-    t.integer "start"
-    t.integer "end"
+    t.string "name"
+    t.integer "start_time"
+    t.integer "end_time"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["audio_file_id"], name: "index_clips_on_audio_file_id"
+    t.index ["deleted_at"], name: "index_clips_on_deleted_at"
     t.index ["user_id"], name: "index_clips_on_user_id"
   end
 
@@ -62,19 +66,57 @@ ActiveRecord::Schema.define(version: 2019_08_16_031642) do
     t.bigint "audio_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.string "commentable_type"
     t.bigint "commentable_id"
     t.index ["audio_file_id"], name: "index_comments_on_audio_file_id"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["deleted_at"], name: "index_comments_on_deleted_at"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "folder_items", force: :cascade do |t|
+    t.string "item_type"
+    t.bigint "item_id"
+    t.bigint "folder_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_folder_items_on_deleted_at"
+    t.index ["folder_id"], name: "index_folder_items_on_folder_id"
+    t.index ["item_type", "item_id"], name: "index_folder_items_on_item_type_and_item_id"
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.bigint "parent_id"
+    t.bigint "user_id"
+    t.string "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_folders_on_deleted_at"
+    t.index ["parent_id"], name: "index_folders_on_parent_id"
+    t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "other_files", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_other_files_on_deleted_at"
+    t.index ["user_id"], name: "index_other_files_on_user_id"
   end
 
   create_table "project_attachments", force: :cascade do |t|
     t.string "item_type"
     t.bigint "item_id"
     t.bigint "project_id"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_project_attachments_on_deleted_at"
     t.index ["item_type", "item_id"], name: "index_project_attachments_on_item_type_and_item_id"
     t.index ["project_id"], name: "index_project_attachments_on_project_id"
   end
@@ -82,8 +124,10 @@ ActiveRecord::Schema.define(version: 2019_08_16_031642) do
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -106,6 +150,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_031642) do
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email"
     t.index ["username"], name: "index_users_on_username"
   end

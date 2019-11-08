@@ -1,8 +1,8 @@
-class CreateProjectAttachments < ActiveRecord::Migration[5.2]
+class CreateFolderItems < ActiveRecord::Migration[5.2]
   def change
-    create_table :project_attachments do |t|
+    create_table :folder_items do |t|
       t.references :item, polymorphic: true, index: true
-      t.references :project, index: true
+      t.references :folder, index: true
 
       t.datetime :deleted_at, index: true
       t.timestamps

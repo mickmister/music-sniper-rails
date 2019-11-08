@@ -1,9 +1,11 @@
 class Comment < ApplicationRecord
+  include BelongsToUser
   belongs_to :user, inverse_of: :comments
+  acts_as_paranoid
+
   belongs_to :commentable, polymorphic: true, inverse_of: :comments
 
-  # scope audio_file_comments
-  # scope :timestamp_comments, -> {where(:body).like(regex or something)}
+  validates :text, presence: true
 
   def audio_file
     return nil unless commentable_type == 'AudioFile'

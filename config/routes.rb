@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :other_files
+  resources :folders
   resources :clips
   resources :projects do
     member do
