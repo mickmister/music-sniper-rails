@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_19_060644) do
+ActiveRecord::Schema.define(version: 2019_08_16_031642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,22 @@ ActiveRecord::Schema.define(version: 2019_02_19_060644) do
 
   create_table "audio_files", force: :cascade do |t|
     t.string "name"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_audio_files_on_user_id"
+  end
+
+  create_table "clips", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "audio_file_id"
+    t.boolean "is_audio_file", default: false
+    t.integer "start"
+    t.integer "end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["audio_file_id"], name: "index_clips_on_audio_file_id"
+    t.index ["user_id"], name: "index_clips_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -48,30 +62,34 @@ ActiveRecord::Schema.define(version: 2019_02_19_060644) do
     t.bigint "audio_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "commentable_type"
+    t.bigint "commentable_id"
     t.index ["audio_file_id"], name: "index_comments_on_audio_file_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "project_attachments", force: :cascade do |t|
+    t.string "item_type"
+    t.bigint "item_id"
+    t.bigint "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_type", "item_id"], name: "index_project_attachments_on_item_type_and_item_id"
+    t.index ["project_id"], name: "index_project_attachments_on_project_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "ratings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "sections", force: :cascade do |t|
-    t.bigint "audio_file_id"
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["audio_file_id"], name: "index_sections_on_audio_file_id"
-  end
-
-  create_table "song_tags", force: :cascade do |t|
-    t.bigint "tag_id"
-    t.bigint "section_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["section_id"], name: "index_song_tags_on_section_id"
-    t.index ["tag_id"], name: "index_song_tags_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|

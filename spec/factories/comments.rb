@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :audio_file do
-    
+  factory :comment do
+
   end
 
 end

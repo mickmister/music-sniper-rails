@@ -1,6 +1,5 @@
 FactoryBot.define do
-  factory :audio_file do
+  factory :project_attachment do
     
   end
-
 end
