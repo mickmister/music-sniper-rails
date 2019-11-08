@@ -1,31 +1,24 @@
 version: '3'
 services:
   rails:
-    command: rails s
+    command: rails db:drop db:create db:migrate bundle exec rspec
     volumes:
       - .:/app
       - ./Gemfile.lock:/app/Gemfile.lock
       - /app/tmp
     build: .
-    ports:
-      - "3000:3000"
+    depends_on:
+      - "dbtest"
     environment:
       MUSIC_SNIPER_DATABASE_USERNAME: postgres
       MUSIC_SNIPER_DATABASE_PASSWORD: heydude
       MUSIC_SNIPER_DATABASE_PORT: 5432
-      MUSIC_SNIPER_DATABASE_HOST: db
-      MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
-      RACK_ENV: development
+      MUSIC_SNIPER_DATABASE_HOST: dbtest
       RAILS_HOST: http://localhost:3000
-      RAILS_ENV: development
-    env_file:
-      - .env
-    depends_on:
-      - "db"
-  db:
+      MUSIC_SNIPER_DATABASE_URL: "postgres://user:pass@postgres:5432/datex_dev?pool=5&encoding=utf-8"
+      RAILS_ENV: test
+  dbtest:
     image: postgres
-    ports:
-      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: heydude

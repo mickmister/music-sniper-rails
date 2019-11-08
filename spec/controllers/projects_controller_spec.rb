@@ -79,50 +79,50 @@ RSpec.describe ProjectsController, type: :controller do
       res = JSON.parse(response.body)
       expect(res['project_attachments'].length).to eq(1)
     end
+  end
 
-    describe '#clips' do
-      it 'should return clips' do
-        project = FactoryBot.create(:project, user: @user)
-        clip1 = FactoryBot.create(:clip)
-        clip2 = FactoryBot.create(:clip)
+  describe '#clips' do
+    it 'should return clips' do
+      project = FactoryBot.create(:project, user: @user)
+      clip1 = FactoryBot.create(:clip)
+      clip2 = FactoryBot.create(:clip)
 
-        project.clips = [clip1, clip2]
-        project.save
+      project.clips = [clip1, clip2]
+      project.save
 
-        get :clips, params: {id: project.id}
-        res = JSON.parse(response.body)
-        expect(res.length).to eq(2)
-      end
+      get :clips, params: {id: project.id}
+      res = JSON.parse(response.body)
+      expect(res.length).to eq(2)
     end
+  end
 
-    describe '#add_clip' do
-      it 'should add the clip' do
-        project = FactoryBot.create(:project, user: @user)
-        clip1 = FactoryBot.create(:clip)
-        clip2 = FactoryBot.create(:clip)
+  describe '#add_clip' do
+    it 'should add the clip' do
+      project = FactoryBot.create(:project, user: @user)
+      clip1 = FactoryBot.create(:clip)
+      clip2 = FactoryBot.create(:clip)
 
-        project.clips = [clip1]
-        project.save
+      project.clips = [clip1]
+      project.save
 
-        put :add_clip, params: {id: project.id, clip_id: clip2.id}
-        res = JSON.parse(response.body)
-        expect(res['project_attachments'].length).to eq(2)
-      end
+      put :add_clip, params: {id: project.id, clip_id: clip2.id}
+      res = JSON.parse(response.body)
+      expect(res['project_attachments'].length).to eq(2)
     end
+  end
 
-    describe '#remove_clip' do
-      it 'should remove the clip' do
-        project = FactoryBot.create(:project, user: @user)
-        clip1 = FactoryBot.create(:clip)
-        clip2 = FactoryBot.create(:clip)
+  describe '#remove_clip' do
+    it 'should remove the clip' do
+      project = FactoryBot.create(:project, user: @user)
+      clip1 = FactoryBot.create(:clip)
+      clip2 = FactoryBot.create(:clip)
 
-        project.clips = [clip1, clip2]
-        project.save
+      project.clips = [clip1, clip2]
+      project.save
 
-        put :remove_clip, params: {id: project.id, clip_id: clip2.id}
-        res = JSON.parse(response.body)
-        expect(res['project_attachments'].length).to eq(1)
-      end
+      put :remove_clip, params: {id: project.id, clip_id: clip2.id}
+      res = JSON.parse(response.body)
+      expect(res['project_attachments'].length).to eq(1)
     end
   end
 end

@@ -1,33 +1,54 @@
 class CommentsController < ApplicationController
-  def create
-    @comment = current_user.comments.create!(comment_params)
-    render 'show'
-  end
-
-  def update
-    @comment = current_user.comments.find_by(id: params[:id])
-    @comment.update(comment_params)
-    render 'show'
-  end
+  DOES_NOT_EXIST = 'Comment does not exist'.freeze
 
   def index
-    if params[:audio_file_id]
-      audio_file = AudioFile.find(params[:audio_file_id])
-      @comments = audio_file.comments
+    if params[:commentable_type].present?
+      render json: Comment.where(params.permit(:commentable_type, :commentable_id))
     else
-      @comments = Comment.all
+      render json: Comment.all
     end
   end
 
+  def show
+    comment = current_user.comments.find_by(id: params[:id])
+    if comment.blank?
+      return render json: {error: DOES_NOT_EXIST}, status: :bad_request
+    end
+
+    render json: comment
+  end
+
+  def create
+    comment = current_user.comments.new(comment_params)
+    if !comment.save
+      render json: {error: error_msg(comment)}, status: :bad_request
+      return
+    end
+    render json: comment
+  end
+
+  def update
+    comment = current_user.comments.find_by(id: params[:id])
+    if !comment.update(comment_params)
+      return render json: {error: error_msg(comment)}, status: :bad_request
+    end
+
+    render json: comment
+  end
+
   def destroy
-    @comment = current_user.comments.find_by(id: params[:id])
-    @comment.destroy!
+    comment = current_user.comments.find_by(id: params[:id])
+    if comment.blank?
+      return render json: {error: DOES_NOT_EXIST}, status: :bad_request
+    end
+
+    comment.destroy!
     render json: {}
   end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:text, :audio_file_id)
+    params.require(:comment).permit(:text, :commentable_type, :commentable_id)
   end
 end
