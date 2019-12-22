@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_08_051201) do
+ActiveRecord::Schema.define(version: 2019_11_17_054535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,10 +38,11 @@ ActiveRecord::Schema.define(version: 2019_11_08_051201) do
 
   create_table "audio_files", force: :cascade do |t|
     t.string "name"
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.float "audio_length"
+    t.bigint "user_id"
     t.index ["deleted_at"], name: "index_audio_files_on_deleted_at"
     t.index ["user_id"], name: "index_audio_files_on_user_id"
   end
@@ -50,8 +51,8 @@ ActiveRecord::Schema.define(version: 2019_11_08_051201) do
     t.bigint "user_id"
     t.bigint "audio_file_id"
     t.string "name"
-    t.integer "start_time"
-    t.integer "end_time"
+    t.float "start_time"
+    t.float "end_time"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -99,6 +100,23 @@ ActiveRecord::Schema.define(version: 2019_11_08_051201) do
     t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.boolean "marked_read", default: false
+    t.boolean "email_notified", default: false
+    t.bigint "user_id"
+    t.string "source_type"
+    t.bigint "source_id"
+    t.string "notification_type"
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_notified"], name: "index_notifications_on_email_notified"
+    t.index ["marked_read"], name: "index_notifications_on_marked_read"
+    t.index ["notification_type"], name: "index_notifications_on_notification_type"
+    t.index ["source_type", "source_id"], name: "index_notifications_on_source_type_and_source_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "other_files", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id"
@@ -123,23 +141,13 @@ ActiveRecord::Schema.define(version: 2019_11_08_051201) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
+    t.text "description"
     t.bigint "user_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["user_id"], name: "index_projects_on_user_id"
-  end
-
-  create_table "ratings", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "tags", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

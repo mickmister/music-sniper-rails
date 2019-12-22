@@ -10,7 +10,8 @@ class AuthenticateUser
     if user
       auth_token = JsonWebToken.encode(user_id: user.id) if user
       return {
-        auth_token: auth_token, user: user.safe_attributes
+        auth_token: auth_token,
+        user: user.as_json
       }
     else
       raise 'Auth failed'

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   resources :other_files
   resources :folders
   resources :clips
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
     collection do
       post 'login'
       post 'signup'
+      post 'google_signup'
+      post 'google_login'
     end
   end
 
