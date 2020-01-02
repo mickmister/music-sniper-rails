@@ -10,7 +10,7 @@ class AuthenticateUser
     return invalid_credentials if @valid_user_auth.blank?
 
     auth_token = JsonWebToken.encode(user_id: user.id)
-    { auth_token: auth_token, user: user.safe_attributes }
+    { auth_token: auth_token, user: user.as_json }
   end
 
   private
