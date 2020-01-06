@@ -11,6 +11,15 @@ class AuthenticationController < ApplicationController
     authenticate(params[:password])
   end
 
+  def google_login
+
+  end
+
+  def google_signup
+    token = params[:token]
+    authenticate_with_google(token)
+  end
+
   private
 
   def authenticate(password)
@@ -27,6 +36,16 @@ class AuthenticationController < ApplicationController
     return false unless [@user, password].all?
 
     @user.authenticate(password)
+  end
+
+  def authenticate_with_google(token)
+    command = GoogleTokenVerify.call(token)
+
+    if command.success?
+      render json: command.result
+    else
+      render json: { error: command.errors }, status: :unauthorized
+    end
   end
 
   def signup_params

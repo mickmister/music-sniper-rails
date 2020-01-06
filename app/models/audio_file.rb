@@ -15,8 +15,10 @@ class AudioFile < ApplicationRecord
     calculate_url(attached_file)
   end
 
-  def content_type
-    attached_file.attachment.blob.content_type
+  def as_json(options={})
+    super(options).merge(
+      content_type: content_type(attached_file),
+    )
   end
 
 end

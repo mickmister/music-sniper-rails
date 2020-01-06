@@ -8,7 +8,6 @@ class Folder < ApplicationRecord
 
     has_many :folder_items, inverse_of: :folder, dependent: :destroy
     accepts_nested_attributes_for :folder_items, allow_destroy: true
-    belongs_to :user, inverse_of: :folders
 
     has_many :audio_files, through: :folder_items, inverse_of: :folders, source: :item, source_type: AudioFile.name
     has_many :clips, through: :folder_items, inverse_of: :folders, source: :item, source_type: Clip.name

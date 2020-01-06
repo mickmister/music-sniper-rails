@@ -10,7 +10,7 @@ class OtherFilesController < ApplicationController
   end
 
   def create
-    f = OtherFile.new(post_params.merge(user_id: current_user.id))
+    f = current_user.other_files.new(post_params)
     if !f.save
       err = error_msg(f)
       render json: {error: err}, status: :bad_request
@@ -22,7 +22,7 @@ class OtherFilesController < ApplicationController
 
   def update
     f = OtherFile.find(params[:id])
-    if !f.update(put_params.merge(user_id: current_user.id))
+    if !f.update(put_params)
       err = error_msg(f)
       render json: {error: err}, status: :bad_request
       return

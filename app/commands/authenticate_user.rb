@@ -9,13 +9,11 @@ class AuthenticateUser
   def call
     return invalid_credentials if @valid_user_auth.blank?
 
-    auth_token = JsonWebToken.encode(user_id: user.id)
-    { auth_token: auth_token, user: user.as_json }
+    auth_token = JsonWebToken.encode(user_id: @user.id)
+    return { auth_token: auth_token, user: @user.as_json }
   end
 
   private
-
-  attr_accessor :user, :valid_user_auth
 
   def invalid_credentials
     errors.add :user_authentication, 'invalid credentials'
