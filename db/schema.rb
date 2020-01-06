@@ -176,5 +176,4 @@ ActiveRecord::Schema.define(version: 2019_11_17_054535) do
     t.index ["username"], name: "index_users_on_username"
   end
 
-  add_foreign_key "o_auth_access_data", "users"
 end
