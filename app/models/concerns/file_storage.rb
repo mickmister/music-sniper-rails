@@ -1,5 +1,9 @@
 module FileStorage
-  include Rails.application.routes.url_helpers
+  extend ActiveSupport::Concern
+
+  included do
+    include Rails.application.routes.url_helpers
+  end
 
   def calculate_url(storage_obj)
     return nil unless storage_obj.attached?
@@ -17,4 +21,9 @@ module FileStorage
     ].join('/')
   end
 
+  def content_type(storage_obj)
+    if storage_obj.attached?
+      storage_obj.attachment.blob.content_type
+    end
+  end
 end

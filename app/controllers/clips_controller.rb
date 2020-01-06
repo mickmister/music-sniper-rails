@@ -1,12 +1,12 @@
 class ClipsController < ApplicationController
   def create
-    p = clip_params.merge(user_id: current_user.id)
+    p = clip_params
     if p[:audio_file_id].blank?
       render json: {error: 'No audio file id'}, status: 400
       return
     end
 
-    c = Clip.new(p)
+    c = current_user.clips.new(p)
     if c.save
       render json: c
     else
@@ -29,6 +29,6 @@ class ClipsController < ApplicationController
   end
 
   def clip_params
-    params.require(:clip).permit(:audio_file_id, :name, :start, :end)
+    params.require(:clip).permit(:audio_file_id, :name, :start_time, :end_time)
   end
 end

@@ -5,8 +5,8 @@ class CreateClips < ActiveRecord::Migration[5.2]
       t.references :audio_file, index: true
 
       t.string :name
-      t.integer :start_time
-      t.integer :end_time
+      t.float :start_time
+      t.float :end_time
 
       t.datetime :deleted_at, index: true
       t.timestamps
