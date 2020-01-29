@@ -1,5 +1,6 @@
 class OmniauthSessionsController < ApplicationController
   skip_before_action :authenticate_request
+  skip_before_action :force_json
 
   def create
     @user = ::UserFromOmniauth.new(request.env['omniauth.auth']).call
@@ -18,9 +19,9 @@ class OmniauthSessionsController < ApplicationController
     command = ::AuthenticateUser.call(@user, true)
 
     if command.success?
-      render json: command.result
+      render html: "Connected #{command.result[:user]['email']} account. You may now close this browser tab."
     else
-      unauthorized(errors: command.errors)
+      render html: "Unable to connect account."
     end
   end
 
