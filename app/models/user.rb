@@ -2,7 +2,7 @@ require 'open-uri'
 
 class User < ApplicationRecord
   include FileStorage
-  has_secure_password
+  has_secure_password validations: false
   has_one_attached :avatar
   acts_as_paranoid
 
@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :other_files, inverse_of: :user
   has_many :notifications, inverse_of: :user
   has_many :folders, inverse_of: :user
+  has_many :oauth_access_datas
 
   # validates :email, uniqueness: true, presence: true
 

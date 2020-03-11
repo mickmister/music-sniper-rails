@@ -2,12 +2,13 @@ class AuthenticationController < ApplicationController
   skip_before_action :authenticate_request
 
   def login
-    authenticate(params[:email], params[:password])
+    @user = User.find_by(email)
+    authenticate(params[:password])
   end
 
   def signup
     @user = User.create!(signup_params)
-    authenticate(params[:email], params[:password])
+    authenticate(params[:password])
   end
 
   def google_login
@@ -21,14 +22,20 @@ class AuthenticationController < ApplicationController
 
   private
 
-  def authenticate(email, password)
-    command = AuthenticateUser.call(params[:email], params[:password])
+  def authenticate(password)
+    command = AuthenticateUser.call(@user, valid_user_auth?(params[:password]))
 
     if command.success?
       render json: command.result
     else
-      render json: { error: command.errors }, status: :unauthorized
+      unauthorized(errors: command.errors)
     end
+  end
+
+  def valid_user_auth?(password)
+    return false unless [@user, password].all?
+
+    @user.authenticate(password)
   end
 
   def authenticate_with_google(token)

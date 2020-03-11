@@ -33,4 +33,8 @@ Rails.application.routes.draw do
       get :audio_files
     end
   end
+
+  # Routes for Google authentication
+  get 'auth/:provider/callback', to: 'omniauth_sessions#create'
+  get 'auth/failure', to: redirect('/')
 end

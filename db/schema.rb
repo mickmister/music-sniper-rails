@@ -117,6 +117,18 @@ ActiveRecord::Schema.define(version: 2019_11_17_054535) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "o_auth_access_data", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "provider"
+    t.string "token"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider"], name: "index_o_auth_access_data_on_provider"
+    t.index ["user_id"], name: "index_o_auth_access_data_on_user_id"
+  end
+
   create_table "other_files", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id"
